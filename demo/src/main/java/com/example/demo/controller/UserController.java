@@ -3,8 +3,14 @@ package com.example.demo.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.vault.core.VaultKeyValueOperationsSupport.KeyValueBackend;
+import org.springframework.vault.core.VaultTemplate;
+import org.springframework.vault.support.VaultResponse;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,13 +27,30 @@ import com.example.demo.service.UserServiceInterface;
 import com.github.fge.jsonpatch.JsonPatch;
 
 @RestController
+@RefreshScope
 @RequestMapping("/user")
 public class UserController {
 
 	private UserServiceInterface userService;
+	
+	@Value("${msg}")
+	String message;
+	@Autowired
+	private VaultTemplate vaultTemplate;
+
+	@Value("")
+	private String username;
+
+	@Value("")
+	public String password;
 
 	@GetMapping
 	public ResponceDTO getAllUsers() {
+		System.out.println(message);
+		VaultResponse response = vaultTemplate
+		        .opsForKeyValue("VaultKV", KeyValueBackend.KV_2).get("VaultKV");//SecretPath
+		System.out.println(response.getData().get("VaultKV.SecretPath.username"));
+		
 		List<UserRoleDTO> list = userService.getAllUsers();
 		if (list.isEmpty())
 			return new ResponceDTO(HttpStatus.NO_CONTENT.value(), "Users Not Found", list);
@@ -89,6 +112,7 @@ public class UserController {
 
 	public UserController(UserServiceInterface userService) {
 		this.userService = userService;
+		System.out.println(message);
 	}
 
 }

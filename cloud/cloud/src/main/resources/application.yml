@@ -9,25 +9,6 @@ spring:
   config:
    server:
     git:
-     uri: C:\\Users\\Windows\\eclipse-workspace\\Git\\SpringCloudRepo
+     uri: C:\\Users\\Windows\\Project\\SpringCloudRepo
      cloneOnStart: true
-    bootstrap: true
-  vault:
-   uri: http://localhost:8200
-   token: 00000000-0000-0000-0000-000000000000
-   generic: 
-    enabled: true
-    backend: codeusingjava
-    default-context: credentials
-    
-management:
- security:
-  enabled: false
-  
-  spring.
 
-spring.cloud.vault.uri=
-spring.cloud.vault.token=
-spring.cloud.vault.generic.enabled=true
-spring.cloud.vault.generic.backend=codeusingjava
-spring.cloud.vault.generic.default-context=credentials
